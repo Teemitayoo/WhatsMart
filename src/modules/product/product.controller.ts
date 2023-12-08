@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { AuthRequest } from '../auth/auth.interface';
 import { BadRequestError, ConflictError, UnAuthorizedError } from '../../common/error';
-import { File } from './product.interface';
+import { multerUpload } from '../../utils/fileStorage/multer';
+import { cloudinaryInstance } from '../../utils/fileStorage';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
@@ -9,7 +10,9 @@ export default class ProductController {
   //Code will be well formated later
   //will work on image upload later
   createProduct = async (req: AuthRequest, res: Response) => {
-    //const imageFile = req.file as File;
+    const localFilePath = req.file?.path || '';
+    const { imageURL } = await cloudinaryInstance.uploadImage(localFilePath);
+
     const {
       productName,
       description,
@@ -19,16 +22,22 @@ export default class ProductController {
       productStatus,
       unitsAvailable,
     } = req.body;
+    //To be able to use postman formdata to test
+    const PPrice = parseFloat(price);
+    const DDiscountedPrice = parseFloat(discountedPrice);
+    const UUnitsAvailable = parseInt(unitsAvailable, 10);
+
     const vendorId = req.payload!.id;
     try {
       const product = await prisma.product.create({
         data: {
           productName,
           description,
-          price,
-          discountedPrice,
+          price: PPrice,
+          discountedPrice: DDiscountedPrice,
           productStatus,
-          unitsAvailable,
+          unitsAvailable: UUnitsAvailable,
+          productImage: imageURL,
           vendor: {
             connect: { id: vendorId },
           },
@@ -118,5 +127,19 @@ export default class ProductController {
       data: { subdomain: subdomain },
     });
     res.status(200).json(updatedVendor.subdomain);
+  };
+  testupload = async (req: AuthRequest, res: Response) => {
+    const gg = req.body;
+    console.log(gg);
+    const localFilePath = req.file?.path || '';
+
+    const { isSuccess, message, statusCode, imageURL } =
+      await cloudinaryInstance.uploadImage(localFilePath);
+
+    return res.status(statusCode).json({
+      isSuccess,
+      message,
+      imageURL,
+    });
   };
 }
