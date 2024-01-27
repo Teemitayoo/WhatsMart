@@ -20,6 +20,16 @@ export default class AuthController {
     return res.json({ success: true, data });
   };
 
+  addAcountDetails = async (req: AuthRequest, res: Response) => {
+    const id = req.payload!.id;
+    const { accountName, accountNumber, bankName } = req.body;
+    await authService.addAccountDetails(id, accountName, accountNumber, bankName);
+    return res.status(201).json({
+      success: true,
+      message: 'Account Details added succesfully!',
+    });
+  };
+
   getAccessToken = async (req: Request, res: Response) => {
     const refreshToken = req.query.token as string;
     const accessToken = await authService.getAccessToken(refreshToken);
@@ -37,7 +47,7 @@ export default class AuthController {
     await authService.verifyEmail(verificationToken);
     return res.status(200).json({ success: true, message: 'Email has been verified' });
   };
-  
+
   getVerficiationMail = async (req: AuthRequest, res: Response) => {
     const email = req.payload!.email;
     await authService.getVerificationMail(email);
@@ -46,5 +56,4 @@ export default class AuthController {
       message: 'A verification link has been sent to your email address!',
     });
   };
-
 }

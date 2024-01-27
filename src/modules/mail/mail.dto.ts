@@ -1,5 +1,5 @@
 export interface MailInterface {
-  to: string | string[];
+  to: string | string[] | undefined;
   subject: string;
   text?: string;
   html?: string;

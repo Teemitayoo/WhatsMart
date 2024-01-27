@@ -124,6 +124,22 @@ export default class authService {
       throw new BadRequestError('Wrong details provided');
     }
   }
+  async addAccountDetails(
+    id: string,
+    accountName: string,
+    accountNumber: string,
+    bankName: string,
+  ) {
+    try {
+      const vendor = await authRepository.getVendor({ id });
+      if (!vendor) {
+        throw new UnAuthorizedError('Invalid Login Credentials');
+      }
+      await authRepository.updateVendor({ id }, { accountName, accountNumber, bankName });
+    } catch (err: any) {
+      throw new BadRequestError('Wrong details provided');
+    }
+  }
 
   private async generateToken(vendor: any) {
     const accessToken = createAcessToken(vendor);

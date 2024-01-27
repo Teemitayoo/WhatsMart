@@ -21,24 +21,57 @@ model Vendor {
   joinedAt          DateTime       @default(now())
   defaultSubdomain  String         @unique
   subdomain         String?        @unique
+  accountName       String?
+  accountNumber     String?
+  bankName          String?
   categories        Category[]
   refreshTokens     RefreshToken[]
   products          Product[]
+  Order             Order[]
 }
 
 model Product {
-  id              String   @id @default(uuid())
+  id              String      @id @default(uuid())
   productName     String
   description     String
-  productCategory Category @relation(fields: [categoryId], references: [id])
+  productCategory Category    @relation(fields: [categoryId], references: [id])
   price           Float
   discountedPrice Float?
   productStatus   String
   unitsAvailable  Int
   productImage    String?
-  vendor          Vendor   @relation(fields: [vendorId], references: [id])
+  vendor          Vendor      @relation(fields: [vendorId], references: [id])
   vendorId        String
   categoryId      String
+  OrderItem       OrderItem[]
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  shortId         String      @unique
+  name            String
+  phoneNumber     String
+  totalPrice      Decimal?
+  deliveryAddress String
+  isPickup        Boolean
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  vendor          Vendor      @relation(fields: [vendorId], references: [id])
+  vendorId        String
+  orderItems      OrderItem[]
+}
+
+model OrderItem {
+  id          String   @id @default(uuid())
+  orderId     String
+  productId   String
+  quantity    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  totalAmount Decimal
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }
 
 model Category {
