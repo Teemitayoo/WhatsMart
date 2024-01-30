@@ -36,6 +36,7 @@ export default class authService {
 
     return password;
   }
+  
   private generateRandomSubdomain() {
     const randomChars = 'abcdefghijklmnopqrstuvwxyz';
     const defaultSubdomain = Array.from(

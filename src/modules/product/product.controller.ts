@@ -135,6 +135,7 @@ export default class ProductController {
     });
     res.status(200).json(updatedVendor.subdomain);
   };
+
   testupload = async (req: AuthRequest, res: Response) => {
     const gg = req.body;
     console.log(gg);
@@ -241,7 +242,7 @@ export default class ProductController {
     const mailTemplate = orderemailTemplate(vendor?.storeName, orderLink, name, phoneNumber);
     await mailService.sendMail({
       to: vendor?.email,
-      subject: 'Verify Your Email Address',
+      subject: 'Pending Order!!',
       html: mailTemplate,
     });
 

@@ -82,7 +82,7 @@ export const orderemailTemplate = (
   <p>Hi ${storename}!</p>
   <p>You just received an order from ${customername} </p>
   <p>Click on the button below to check it out:</p>
-  <a href="${link}" class="button">Checkout Order</a>
+  <a href="${link}" class="button">Check out Order</a>
   <p>If ${customername} has not reached out to you yet, you can reach out to them on ${customernumber}.</p>
   <p class="signature">Best regards,</p>
   <p class="signature">The KARTIN Team</p>

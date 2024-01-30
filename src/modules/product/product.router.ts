@@ -16,6 +16,6 @@ router.post(
 router.get('/get-vendor-products', protect(), productController.getAllProducts);
 router.get('/:subdomain', productController.getStore);
 router.post('/customizesubdomain', protect(), productController.customizeSubdomain);
-router.post('/upload', multerUpload.single('image'), productController.testupload);
+//router.post('/upload', multerUpload.single('image'), productController.testupload);
 router.post('/create-order/:vendorId', productController.createOrder);
 export default router;
