@@ -55,7 +55,7 @@ export default class authService {
   async signUp(vendorInfo: any): Promise<void> {
     let { email, whatsappNumber, storeName } = vendorInfo;
     const generatedPassword: string = this.generateRandomPassword(10);
-    console.log(generatedPassword);
+    //console.log(generatedPassword);
     const password = await hashPassword(generatedPassword);
 
     try {
